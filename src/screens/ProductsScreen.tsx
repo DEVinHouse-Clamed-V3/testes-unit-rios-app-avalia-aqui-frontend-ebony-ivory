@@ -61,6 +61,7 @@ const goToHome = () => {
         renderItem={renderItem}
         />
         <View style={styles.buttonContainer}>
+          
           <TouchableOpacity style={styles.goToEvaluate} onPress={goToEvaluation}><Text style={styles.buttonText}>Avaliar</Text></TouchableOpacity>
           <TouchableOpacity style={styles.goToHome} onPress={goToHome}><Text style={styles.buttonText}>Home</Text></TouchableOpacity>
         </View>
