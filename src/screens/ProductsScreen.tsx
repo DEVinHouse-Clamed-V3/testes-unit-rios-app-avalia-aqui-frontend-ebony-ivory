@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/NavType';
+import { getProducts } from '../actions/ListProducts.actions';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'HomeScreen'>;
 
@@ -32,15 +33,13 @@ const goToHome = () => {
   const [ productsList, setProductsList ] = useState<ProductsList[]>([])
 
   useEffect(() => {
-    axios.get('http://10.0.0.113:3000/products')
-    .then((response) => {
-      setProductsList(response.data)
-      console.log(response.data)
-    })
-    .catch(() =>{
-      Alert.alert("Não foi possível obter os dados.")
-    })
-}, [])
+    getProducts()
+      .then((data) => {
+        if (data) {
+          setProductsList(data);
+        }
+      });
+  }, []);
 
   const renderItem = ({item} : {item:ProductsList}) => {
     return (
@@ -61,7 +60,8 @@ const goToHome = () => {
         renderItem={renderItem}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.goToEvaluate} onPress={goToEvaluation}><Text style={styles.buttonText}>Avaliar</Text></TouchableOpacity>
+          
+          <TouchableOpacity testID='button-avalia' style={styles.goToEvaluate} onPress={goToEvaluation}><Text style={styles.buttonText}>Avaliar</Text></TouchableOpacity>
           <TouchableOpacity style={styles.goToHome} onPress={goToHome}><Text style={styles.buttonText}>Home</Text></TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -29,7 +29,12 @@ export default function HomeScreen() {
 
           <Text style={styles.title}>Avalie Aqui</Text>
           <Text style={styles.subtitle}>Escolha o produto que deseja avaliar e compartilhe sua experiência com outros consumidores.</Text>
-          <TouchableOpacity style={styles.enterButton} onPress={goToProducts}><Text style={styles.buttonText}>Entrar</Text></TouchableOpacity>
+          <TouchableOpacity 
+          style={styles.enterButton} 
+          onPress={goToProducts}
+          testID='button'>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
 
       </View>
   );
