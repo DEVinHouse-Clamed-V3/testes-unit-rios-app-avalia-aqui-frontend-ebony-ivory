@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/NavType';
+import { Evaluation } from '../actions/auth.actions';
 
 interface Product {
   id: number;
@@ -67,7 +68,15 @@ export default function EvaluationScreen() {
       };
 
       setTimeout(() => {
-        axios.post('http://10.0.0.113:3000/evaluations', data)
+        Evaluation(
+          evaluationId,
+          selectedProductId || 0,
+          yourName,
+          email,
+          feedback,
+          experience,
+          recommend
+        )
           .then(() => {
             Alert.alert('Avaliação enviada com sucesso!');
             setYourName('');
@@ -84,7 +93,7 @@ export default function EvaluationScreen() {
           .finally(() => {
             setIsLoading(false);
           });
-      }, 5000);
+      }, 2000);
     }
   }
 
@@ -100,9 +109,10 @@ export default function EvaluationScreen() {
       <Picker
         selectedValue={selectedProductId}
         style={styles.picker}
+        testID='productPicker'
         onValueChange={(itemValue) => setSelectedProductId(itemValue)}
       >
-        <Picker.Item label="Selecione um produto" value={null} />
+        <Picker.Item  label="Selecione um produto" value={null} />
         {products.map((product) => (
           <Picker.Item key={product.id} label={product.name} value={product.id} />
         ))}
@@ -113,6 +123,7 @@ export default function EvaluationScreen() {
         value={yourName}
         onChangeText={setYourName}
         style={styles.input}
+        testID='yourName'
       />
       <TextInput
         placeholder="Seu Email"
@@ -120,6 +131,7 @@ export default function EvaluationScreen() {
         onChangeText={setEmail}
         style={styles.input}
         keyboardType="email-address"
+        testID='email'
       />
       <TextInput
         placeholder="Descreva sua experiência..."
@@ -127,13 +139,14 @@ export default function EvaluationScreen() {
         onChangeText={setFeedback}
         style={styles.feedbackInput}
         multiline
+        testID='feedback'
       />
         <Text style={{...styles.title, fontSize: 20, left: -50}}>Compartilhe sua experiência</Text>
       <View style={styles.expContainer}>
-        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#008265' }} onPress={() => setExperience('Ótimo')} ><Text style={styles.buttonText}>Ótimo</Text></TouchableOpacity>
-        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#0047ab' }} onPress={() => setExperience('Bom')}><Text style={styles.buttonText}>Bom</Text></TouchableOpacity>
-        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#ffbc4d' }} onPress={() => setExperience('Regular')}><Text style={styles.buttonText}>Regular</Text></TouchableOpacity>
-        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#f04d6c' }} onPress={() => setExperience('Ruim')}><Text style={styles.buttonText}>Ruim</Text></TouchableOpacity>
+        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#008265' }} onPress={() => setExperience('Ótimo')} testID="experience-option-otimo" ><Text style={styles.buttonText}>Ótimo</Text></TouchableOpacity>
+        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#0047ab' }} onPress={() => setExperience('Bom')} testID="experience-option-bom"><Text style={styles.buttonText}>Bom</Text></TouchableOpacity>
+        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#ffbc4d' }} onPress={() => setExperience('Regular')} testID="experience-option-regular"><Text style={styles.buttonText}>Regular</Text></TouchableOpacity>
+        <TouchableOpacity style={{...styles.expButton, backgroundColor: '#f04d6c' }} onPress={() => setExperience('Ruim')} testID="experience-option-ruim"><Text style={styles.buttonText}>Ruim</Text></TouchableOpacity>
       </View>
       <View style={styles.checkboxContainer}>
         <Checkbox
@@ -141,10 +154,11 @@ export default function EvaluationScreen() {
           onValueChange={setRecommend}
           style={styles.checkbox}
           color={recommend ? '#639d70' : undefined}
+          testID='checkbox'
         />
         <Text>Você recomendaria este produto?</Text>
       </View>
-      <TouchableOpacity style={styles.feedbackButton} onPress={saveFormData}>
+      <TouchableOpacity style={styles.feedbackButton} onPress={saveFormData} testID='button-sendFeedback'>
         {isLoading ? ( // Exibe o indicador de carregamento enquanto isLoading é true
           <ActivityIndicator size="small" color="#fff" />
         ) : (
